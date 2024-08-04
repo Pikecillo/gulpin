@@ -57,9 +57,12 @@ void PluginManager::unloadPlugins()
 
         using DestroyPluginFunc = void (*)(IPlugin*);
 
-        DestroyPluginFunc destroyPlugin = reinterpret_cast<DestroyPluginFunc>(dlsym(handle, "DestroyPlugin"));
+        DestroyPluginFunc destroyPlugin = reinterpret_cast<DestroyPluginFunc>(dlsym(handle, "destroyPlugin"));
         if (destroyPlugin) {
             destroyPlugin(plugin);
+        }
+        else {
+            std::cerr << "Failed to destroy plugin" << std::endl;
         }
 
         dlclose(handle);
