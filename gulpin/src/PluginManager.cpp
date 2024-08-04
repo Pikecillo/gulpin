@@ -8,6 +8,11 @@
 
 namespace gulpin {
 
+namespace {
+    const char* ḱCreatePluginFuncName = "createPlugin";
+    const char* kDestroyPluginFuncName = "destroyPlugin";
+}
+
 PluginManager::~PluginManager()
 {
     unloadPlugins();
@@ -24,7 +29,7 @@ bool PluginManager::loadPlugin(const std::string& objectPath)
 
     using CreatePluginFunc = IPlugin* (*)();
 
-    CreatePluginFunc createPlugin = reinterpret_cast<CreatePluginFunc>(dlsym(handle, "createPlugin"));
+    CreatePluginFunc createPlugin = reinterpret_cast<CreatePluginFunc>(dlsym(handle, ḱCreatePluginFuncName));
     if (!createPlugin) {
         std::cerr << "Failed to load CreatePlugin function" << std::endl;
         dlclose(handle);
@@ -57,11 +62,10 @@ void PluginManager::unloadPlugins()
 
         using DestroyPluginFunc = void (*)(IPlugin*);
 
-        DestroyPluginFunc destroyPlugin = reinterpret_cast<DestroyPluginFunc>(dlsym(handle, "destroyPlugin"));
+        DestroyPluginFunc destroyPlugin = reinterpret_cast<DestroyPluginFunc>(dlsym(handle, kDestroyPluginFuncName));
         if (destroyPlugin) {
             destroyPlugin(plugin);
-        }
-        else {
+        } else {
             std::cerr << "Failed to destroy plugin" << std::endl;
         }
 
