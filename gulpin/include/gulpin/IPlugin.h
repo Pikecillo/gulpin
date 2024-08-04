@@ -4,8 +4,7 @@
 
 class IPlugin {
 public:
-    struct Descriptor
-    {
+    struct Descriptor {
         std::string name;
         std::string version;
     };
@@ -13,11 +12,11 @@ public:
     virtual ~IPlugin() = default;
 
     virtual void initialize() = 0;
-    
+
     virtual void execute() = 0;
-    
+
     virtual void shutdown() = 0;
-    
+
     virtual Descriptor getDescriptor() const = 0;
 };
 

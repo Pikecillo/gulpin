@@ -17,11 +17,11 @@ public:
     ~PluginManager();
 
     bool loadPlugin(const std::string& path);
-    
+
     void unloadPlugins();
-    
+
     std::optional<std::reference_wrapper<IPlugin>> getPlugin(const std::string& name) const;
-    
+
     std::vector<std::string> getPluginNames() const;
 
 private:

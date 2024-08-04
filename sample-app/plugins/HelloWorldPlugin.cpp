@@ -5,24 +5,29 @@
 
 class HelloWorldPlugin : public IPlugin {
 public:
-    void initialize() override {
+    void initialize() override
+    {
         std::cout << "HelloWorldPlugin Initialized" << std::endl;
     }
 
-    void execute() override {
+    void execute() override
+    {
         std::cout << "Hello World!" << std::endl;
     }
 
-    void shutdown() override {
+    void shutdown() override
+    {
         std::cout << "HelloWorldPlugin Shutting Down" << std::endl;
     }
 
-    Descriptor getDescriptor() const override {
-        return Descriptor{"HelloWorldPlugin", "1.0"};
+    Descriptor getDescriptor() const override
+    {
+        return Descriptor { "HelloWorldPlugin", "1.0" };
     }
 };
 
-IPlugin* createPlugin() {
+IPlugin* createPlugin()
+{
     return new HelloWorldPlugin();
 }
 

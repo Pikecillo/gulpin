@@ -8,11 +8,13 @@
 
 namespace gulpin {
 
-PluginManager::~PluginManager() {
+PluginManager::~PluginManager()
+{
     unloadPlugins();
 }
 
-bool PluginManager::loadPlugin(const std::string& objectPath) {
+bool PluginManager::loadPlugin(const std::string& objectPath)
+{
     void* handle = dlopen(objectPath.c_str(), RTLD_LAZY);
     if (!handle) {
         std::cerr << "Failed to load plugin: " << objectPath << std::endl;
@@ -46,13 +48,14 @@ bool PluginManager::loadPlugin(const std::string& objectPath) {
     return true;
 }
 
-void PluginManager::unloadPlugins() {
+void PluginManager::unloadPlugins()
+{
     for (auto& entry : m_plugins) {
         const std::string& name = entry.first;
         IPlugin* plugin = entry.second;
         void* handle = m_handles[name];
 
-        using DestroyPluginFunc = void(*)(IPlugin*);
+        using DestroyPluginFunc = void (*)(IPlugin*);
 
         DestroyPluginFunc destroyPlugin = reinterpret_cast<DestroyPluginFunc>(dlsym(handle, "DestroyPlugin"));
         if (destroyPlugin) {
@@ -66,7 +69,8 @@ void PluginManager::unloadPlugins() {
     m_handles.clear();
 }
 
-std::optional<std::reference_wrapper<IPlugin>> PluginManager::getPlugin(const std::string& name) const {
+std::optional<std::reference_wrapper<IPlugin>> PluginManager::getPlugin(const std::string& name) const
+{
     auto it = m_plugins.find(name);
     if (it != m_plugins.end()) {
         return std::make_optional<std::reference_wrapper<IPlugin>>(*it->second);
@@ -74,7 +78,8 @@ std::optional<std::reference_wrapper<IPlugin>> PluginManager::getPlugin(const st
     return {};
 }
 
-std::vector<std::string> PluginManager::getPluginNames() const {
+std::vector<std::string> PluginManager::getPluginNames() const
+{
     std::vector<std::string> names;
     for (const auto& entry : m_plugins) {
         names.push_back(entry.first);
